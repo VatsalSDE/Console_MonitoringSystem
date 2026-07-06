@@ -1,6 +1,6 @@
 package com.vatsal.monitoring.enums;
 
-public enum AlertStatus {
+public enum AlertSeverity {
     LOW,
 
     MEDIUM,
