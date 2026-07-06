@@ -4,38 +4,47 @@ import com.vatsal.monitoring.enums.ServerStatus;
 import com.vatsal.monitoring.model.Server;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ServerManager {
-    private List<Server> servers = new ArrayList<>();
+    // now replacing the list to map
+
+    private Map<Integer,Server> servers = new LinkedHashMap<>();
 
     public void addServer(Server server){
-        servers.add(server);
+        servers.put(server.getId(),server);
     }
 
     public void displayServers(){
-        for (Server server : servers){
-            System.out.println(server);  // here the to string method that was made works likewise
+
+        if(servers.isEmpty()){
+            System.out.println("No Servers Added Yet.");
+
+            return;
+        }
+        for (Server server : servers.values()) {
+            System.out.println(server);
         }
     }
 
-
     // for finding the server by the server id
     public Server findServerById(int id) {
-        for (Server sr : servers) {
-            if (sr.getId() == id) {
-                return sr;
-            }
+        if(servers.containsKey(id)){
+            return servers.get(id);
         }
         return null;
     }
 
     // for setting the server status
     public void updateStatus(int serverId , ServerStatus str){
-        for (Server sr : servers){
-            if(sr.getId() == serverId){
-                sr.setStatus(str);
-            }
+        Server server = findServerById(serverId);
+
+        if(server!=null){
+
+            server.setStatus(str);
+
         }
     }
 
