@@ -40,9 +40,11 @@ public class MonitoringEngine {
                     break;
 
                 case 3:
+                    updateserverstatusbyId();
+                    break;
+                case 4:
                     exitApplication();
                     break;
-
                 default:
                     System.out.println("Invalid Choice.");
             }
@@ -62,7 +64,8 @@ public class MonitoringEngine {
         System.out.println("\nMenu");
         System.out.println("1. Add Server");
         System.out.println("2. Display Servers");
-        System.out.println("3. Exit");
+        System.out.println("3. Update Server Status");
+        System.out.println("4. Exit");
     }
 
     private void addServer() {
@@ -87,6 +90,27 @@ public class MonitoringEngine {
         serverManager.addServer(server);
 
         System.out.println("\nServer Added Successfully!");
+    }
+
+    private void updateserverstatusbyId(){
+        System.out.println("Enter the Server ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        Server server =serverManager.findServerById(id);
+
+        if(server == null){
+            System.out.println("Server Not Found");
+
+            return;
+        }
+
+        System.out.println("Select the server status you want to update");
+        ServerStatus status = chooseStatus();
+
+        serverManager.updateStatus(id,status);
+        System.out.println("Server Status Updated Successfully");
+
     }
 
     private ServerStatus chooseStatus() {
