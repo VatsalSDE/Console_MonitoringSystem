@@ -1,6 +1,8 @@
 package com.vatsal.monitoring.manager;
 
 import com.vatsal.monitoring.enums.ServerStatus;
+import com.vatsal.monitoring.exception.DuplicateServerException;
+import com.vatsal.monitoring.exception.ServerNotFoundException;
 import com.vatsal.monitoring.model.Server;
 
 import java.util.ArrayList;
@@ -14,6 +16,13 @@ public class ServerManager {
     private Map<Integer,Server> servers = new LinkedHashMap<>();
 
     public void addServer(Server server){
+
+        if (servers.containsKey(server.getId())) {
+            throw new DuplicateServerException(
+                    "Server with ID " + server.getId() + " already exists."
+            );
+        }
+
         servers.put(server.getId(),server);
     }
 
@@ -31,21 +40,28 @@ public class ServerManager {
 
     // for finding the server by the server id
     public Server findServerById(int id) {
-        if(servers.containsKey(id)){
-            return servers.get(id);
+
+        Server server = servers.get(id);
+
+        if (server == null) {
+            throw new ServerNotFoundException(
+                    "Server with ID " + id + " not found."
+            );
         }
-        return null;
+
+        return server;
     }
 
-    // for setting the server status
-    public void updateStatus(int serverId , ServerStatus str){
+    public Server updateStatus(int serverId, ServerStatus status) {
+
         Server server = findServerById(serverId);
 
-        if(server!=null){
-
-            server.setStatus(str);
-
+        if (server.getStatus() == status) {
+            return null;
         }
-    }
 
+        server.setStatus(status);
+
+        return server;
+    }
 }
